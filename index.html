@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Architect Prime | MLB Absolute</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <style>
+        :root {
+            --glass: rgba(255, 255, 255, 0.1);
+            --border: rgba(255, 255, 255, 0.2);
+            --accent: #002D72; /* Classic MLB Blue */
+        }
+        body, html { margin: 0; overflow: hidden; background: #050505; font-family: 'Inter', sans-serif; }
+        
+        #ui-layer {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; justify-content: center; align-items: center;
+            z-index: 10; pointer-events: none;
+        }
+
+        .glass-panel {
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 3rem;
+            text-align: center;
+            pointer-events: auto;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .menu-btn {
+            display: block;
+            width: 250px;
+            padding: 15px;
+            margin: 10px auto;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .menu-btn:hover {
+            background: var(--accent);
+            transform: scale(1.05);
+            box-shadow: 0 0 20px var(--accent);
+        }
+
+        #intro-logo {
+            font-size: 4rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, #fff, #777);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 2rem;
+        }
+
+        canvas { position: fixed; top: 0; left: 0; }
+    </style>
+</head>
+<body>
+    <div id="ui-layer">
+        <div id="main-menu" class="glass-panel">
+            <h1 id="intro-logo">MLB PRIME</h1>
+            <button class="menu-btn" onclick="game.start('quick')">Quick Play</button>
+            <button class="menu-btn" onclick="game.nav('exhibition')">Exhibition</button>
+            <button class="menu-btn" onclick="game.nav('teams')">Team Selection</button>
+        </div>
+    </div>
+
+    <canvas id="render-target"></canvas>
+
+    <script>
+        // Game State Orchestrator
+        const game = {
+            state: 'INTRO',
+            async init() {
+                this.initUI();
+                // We will hook the Three.js scene manager here in the next step
+            },
+            initUI() {
+                gsap.to("#main-menu", { opacity: 1, y: 0, duration: 1.2, ease: "power4.out", delay: 0.5 });
+            },
+            nav(screen) {
+                console.log(`Transitioning to ${screen}`);
+                // Implementation for team/jersey selection logic
+            },
+            start(mode) {
+                gsap.to("#ui-layer", { opacity: 0, duration: 0.5, onComplete: () => {
+                    document.getElementById('ui-layer').style.display = 'none';
+                }});
+            }
+        };
+
+        window.onload = () => game.init();
+    </script>
+</body>
+</html>
+
